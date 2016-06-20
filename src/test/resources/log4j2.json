@@ -1,0 +1,12 @@
+    { "configuration": { "status": "info", "name": "TestLogger",
+        "ThresholdFilter": { "level": "debug" },
+        "appenders": {
+          "Console": { "name": "STDOUT",
+            "PatternLayout": { "pattern": "%m%n" }
+          }
+        },
+        "loggers": {
+          "root": { "level": "debug", "AppenderRef": { "ref": "STDOUT" }}
+        }
+      }
+    }
