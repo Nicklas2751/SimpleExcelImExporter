@@ -14,7 +14,7 @@ A framework based on Apache POI to smilpify the im- and export of excel files. T
 
 ## How to use
 
-1. Install the framework as libary. (Maven artifact in central coming soon.)
+1. Install the framework as libary.
 2. Let all classes which should be im-/exportet implement the interface "DataClass"
 3. Create a data controller for each data class
   * A class implementing the interface "DataController<[DataClass Type]>"
