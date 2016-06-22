@@ -1,8 +1,9 @@
 # SimpleExcelImExporter
 A framework based on Apache POI to smilpify the im- and export of excel files. This framework adds two Annotations to deklare the im- and exportable classes and their fields.
 
-## Status
+## Status / Additional informations
 * Jenkins: [![Build Status](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/badge/icon)](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/)
+* JavaDoc: [![Javadocs](http://www.javadoc.io/badge/eu.wiegandt.nicklas/simpleexcelimexporter.svg)](http://www.javadoc.io/doc/eu.wiegandt.nicklas/simpleexcelimexporter)
 
 ## Maven Artifact
     <dependency>
