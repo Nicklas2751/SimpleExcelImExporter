@@ -4,6 +4,13 @@ A framework based on Apache POI to smilpify the im- and export of excel files. T
 ## Status
 * Jenkins: [![Build Status](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/badge/icon)](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/)
 
+## Maven Artifact
+    <dependency>
+      <groupId>eu.wiegandt.nicklas</groupId>
+      <artifactId>simpleexcelimexporter</artifactId>
+      <version>1.0</version>
+    </dependency>
+
 ## How to use
 
 1. Install the framework as libary. (Maven artifact in central coming soon.)
