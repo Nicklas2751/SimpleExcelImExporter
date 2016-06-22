@@ -1,5 +1,7 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter.exceptions;
 
+import java.io.Serializable;
+
 /**
  * A class which represents an error while im-/exporting.
  *
@@ -9,8 +11,9 @@ package eu.wiegandt.nicklas.simpleexcelimexporter.exceptions;
  *         <b>Skype:</b> Nicklas2751<br>
  *
  */
-public class ExcelImExporterError
+public class ExcelImExporterError implements Serializable
 {
+    private static final long serialVersionUID = -1679175633391151510L;
     private final String message;
     private final ExcelImExportErrorTypes type;
 

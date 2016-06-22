@@ -224,7 +224,7 @@ public class ExcelImporter extends AbstractExcelImExporter
                 {
                     final ExcelImExporterError error =
                             new ExcelImExporterError(ExcelImExportErrorTypes.TABLE_NAME_INVALID);
-                    new ExcelImExporterException(error);
+                    throw new ExcelImExporterException(error);
                 }
             }
             else

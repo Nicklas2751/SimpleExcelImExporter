@@ -32,7 +32,7 @@ public class LocalFileLoaderUtil
         }
         catch (final URISyntaxException uiUriSyntaxException)
         {
-            throw new RuntimeException("This is a critical error. Please report it.", uiUriSyntaxException);
+            throw new IllegalStateException("This is a critical error. Please report it.", uiUriSyntaxException);
         }
     }
 
