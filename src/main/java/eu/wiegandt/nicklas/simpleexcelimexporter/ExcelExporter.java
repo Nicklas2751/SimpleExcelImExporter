@@ -156,11 +156,11 @@ public class ExcelExporter extends AbstractExcelImExporter
     {
         try
         {
-            return aDataClass.getClass().getMethod(fieldNameToGetterName(aExcelImExporterField)).invoke(aDataClass)
-                    .toString();
+            return aDataClass.getClass().getMethod(aExcelImExporterField.getGetterMethodName(aDataClass.getClass()))
+                    .invoke(aDataClass).toString();
         }
         catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                | SecurityException exception)
+                | SecurityException | NoSuchFieldException exception)
         {
 
             LOG.fatal(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);

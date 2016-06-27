@@ -45,10 +45,8 @@ public abstract class AbstractExcelImExporter
             "The table with the name \"%s\" is doesn't exist for im- or export.";
     private static final String ERROR_TEXT_TABLE_MANAGER_IS_NULL =
             "The given table manager is null. The table manager can't be null!";
-    private static final String GETTER_METHOD_START = "get";
     private static final Logger LOG = LogManager.getLogger(AbstractExcelImExporter.class);
     private static final Collection<ExcelImExportObserver> observers = new ArrayList<>();
-    private static final String SETTER_METHOD_START = "set";
 
     protected static final Collection<ExcelTableManager> tableManagers = new ArrayList<>();
 
@@ -147,53 +145,6 @@ public abstract class AbstractExcelImExporter
     }
 
     /**
-     * Converts a field name to a method name with the given method prefix.
-     *
-     * @param aField
-     *            The {@link ExcelImExporterField} with the field name which
-     *            should be converted.
-     * @param aMethodPrefix
-     *            The method prefix.
-     * @return A method name with the prefix and the field name.<br>
-     *         Example: field name: <i>"importField"</i> and method prefix:
-     *         <i>"get"</i> will be converted to: <i>"getImportField"</i>.
-     */
-    private static String fieldNameToMethodName(final ExcelImExporterField aField, final String aMethodPrefix)
-    {
-        final String fieldName = aField.getFieldName();
-
-        final StringBuilder getterMethodNameBuilder = new StringBuilder();
-        getterMethodNameBuilder.append(aMethodPrefix);
-        getterMethodNameBuilder.append(fieldName.substring(0, 1).toUpperCase());
-        getterMethodNameBuilder.append(fieldName.substring(1));
-        return getterMethodNameBuilder.toString();
-    }
-
-    /**
-     * Generates a getter method name for the name of the field.
-     *
-     * @param aField
-     *            The field which name should be used.
-     * @return A getter method name.
-     */
-    protected static String fieldNameToGetterName(final ExcelImExporterField aField)
-    {
-        return fieldNameToMethodName(aField, GETTER_METHOD_START);
-    }
-
-    /**
-     * Generates a setter method name for the name of the field.
-     *
-     * @param aField
-     *            The field which name should be used.
-     * @return A setter method name.
-     */
-    protected static String fieldNameToSetterName(final ExcelImExporterField aField)
-    {
-        return fieldNameToMethodName(aField, SETTER_METHOD_START);
-    }
-
-    /**
      * Searches for a table manager for a table with the given table name.
      *
      * @param aTableName
@@ -206,8 +157,8 @@ public abstract class AbstractExcelImExporter
         {
             throw new IllegalStateException(ERROR_TEXT_NO_TABLE_MANAGER);
         }
-        return tableManagers.parallelStream().filter(excelTableManager -> excelTableManager.getExcelTableClass()
-                .getSimpleName().equalsIgnoreCase(aTableName)).findAny();
+        return tableManagers.parallelStream()
+                .filter(excelTableManager -> excelTableManager.getTableName().equalsIgnoreCase(aTableName)).findAny();
     }
 
     /**

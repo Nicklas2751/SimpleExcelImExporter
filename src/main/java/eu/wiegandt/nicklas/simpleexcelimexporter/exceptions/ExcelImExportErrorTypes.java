@@ -13,6 +13,7 @@ public enum ExcelImExportErrorTypes
 {
     ENCRYPTED_DOCUMENT("A excel sheet or the whole file is encrypted."),
     EXPORT_FAILED_SYSTEM_ERROR("The export failed during a fatal exception. Please report to a developer."),
+    IMEXPORT_FAILED_SYSTEM_ERROR("The im-/export failed during a fatal exception. Please report to a developer."),
     IMPORT_FAILED_SYSTEM_ERROR("The import failed during a fatal exception. Please report to a developer."),
     MAPPING_NO_FALID_JSON_FILE(
             "The mapping file ist not a valid json file. Please checke the json syntax. You could generate a valid mapping json file an fill it with your mapping."),

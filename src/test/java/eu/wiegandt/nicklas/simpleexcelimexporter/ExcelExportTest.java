@@ -2,10 +2,12 @@ package eu.wiegandt.nicklas.simpleexcelimexporter;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,9 +22,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.wiegandt.nicklas.simpleexcelimexporter.AbstractExcelImExporter;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelExporter;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelImExportObserver;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterError;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterException;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterWarning;
@@ -45,8 +44,9 @@ public class ExcelExportTest implements ExcelImExportObserver
             "The excel table \"%s\" doesn't contain the expected values.";
     private static final String EXTENDED_TEST_TABLE_NAME = "TestDataClass";
     private static final Logger LOG = LogManager.getLogger(ExcelExportTest.class);
-    private static final String SIMPLE_TEST_TABLE_NAME = "TestDataClassNoMappingFile";
+    private static final String SIMPLE_TEST_TABLE_NAME = "TestTableSimple";
     private static final String TEST_EXCEL_FILE_NAME_PATTERN = "ExcelExportTest_%d.xlsx";
+    private static final String TEST_FIELD_NAME_EXTENDED_TEST_FIELD_DATE_FIELD = "dateField";
     private static final String TEST_FIELD_NAME_EXTENDED_TEST_FIELD_EXPORT = "export";
     private static final String TEST_FIELD_NAME_EXTENDED_TEST_FIELD_IM_EXPORT = "imexport";
     private static final String TEST_FIELD_NAME_SIMPLE_TEST_FIELD_EXPORT = "testFieldExport";
@@ -104,11 +104,14 @@ public class ExcelExportTest implements ExcelImExportObserver
         readResults(EXTENDED_TEST_TABLE_NAME);
         Assert.assertThat(String.format(ERROR_WRONG_COLUMN_NAMES_PATTERN, EXTENDED_TEST_TABLE_NAME), columnNames,
                 IsCollectionContaining.hasItems(TEST_FIELD_NAME_EXTENDED_TEST_FIELD_EXPORT,
-                        TEST_FIELD_NAME_EXTENDED_TEST_FIELD_IM_EXPORT));
+                        TEST_FIELD_NAME_EXTENDED_TEST_FIELD_IM_EXPORT, TEST_FIELD_NAME_EXTENDED_TEST_FIELD_DATE_FIELD));
+
+        final String expectedDateFieldValue = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY)
+                .format(TestDataController.TEST_VALUE_DATE_FIELD);
 
         Assert.assertThat(String.format(ERROR_WRONG_VALUES_PATTERN, EXTENDED_TEST_TABLE_NAME), values,
                 IsCollectionContaining.hasItems(TestDataController.TEST_VALUE_EXPORT_FIELD,
-                        TestDataController.TEST_VALUE_IMEXPORT_FIELD));
+                        TestDataController.TEST_VALUE_IMEXPORT_FIELD, expectedDateFieldValue));
     }
 
     @Test

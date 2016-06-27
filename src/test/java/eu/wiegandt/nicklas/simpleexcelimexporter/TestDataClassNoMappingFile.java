@@ -4,7 +4,7 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelField;
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelTable;
 import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 
-@ExcelTable(datacontroller = TestDataControllerNoMappingFile.class)
+@ExcelTable(tableName = "TestTableSimple", datacontroller = TestDataControllerNoMappingFile.class)
 public class TestDataClassNoMappingFile implements DataClass
 {
 

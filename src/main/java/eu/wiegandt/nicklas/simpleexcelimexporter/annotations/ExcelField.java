@@ -27,6 +27,13 @@ public @interface ExcelField
     boolean exportable() default false;
 
     /**
+     * Optional parameter to set the name of the getter method.
+     *
+     * @return The getter method name.
+     */
+    String getterMethod() default "";
+
+    /**
      * @return true if the field is importable.
      */
     boolean importable() default false;
@@ -37,5 +44,12 @@ public @interface ExcelField
      * @return true if the field is required.
      */
     boolean requiredField() default false;
+
+    /**
+     * Optional parameter to set the name of the setter method.
+     *
+     * @return The setter method name.
+     */
+    String setterMethod() default "";
 
 }

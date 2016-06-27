@@ -12,9 +12,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.wiegandt.nicklas.simpleexcelimexporter.AbstractExcelImExporter;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelImExportObserver;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelImporter;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterError;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterException;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterWarning;

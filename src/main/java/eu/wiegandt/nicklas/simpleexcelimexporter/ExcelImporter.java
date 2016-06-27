@@ -321,7 +321,9 @@ public class ExcelImporter extends AbstractExcelImExporter
 
             for (final ExcelImExporterField excelImExporterField : aFields)
             {
-                aTableManager.getExcelTableClass().getMethod(fieldNameToSetterName(excelImExporterField), String.class)
+                aTableManager.getExcelTableClass()
+                        .getMethod(excelImExporterField.getSetterMethodName(aTableManager.getExcelTableClass()),
+                                String.class)
                         .invoke(data, new DataFormatter()
                                 .formatCellValue(aRow.getCell(excelImExporterField.getColumnIndex())));
 
@@ -329,7 +331,7 @@ public class ExcelImporter extends AbstractExcelImExporter
             return data;
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-                | SecurityException | InstantiationException exception)
+                | SecurityException | InstantiationException | NoSuchFieldException exception)
         {
             LOG.fatal(ExcelImExportErrorTypes.IMPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
             final ExcelImExporterError errorMessage =

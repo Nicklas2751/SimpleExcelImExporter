@@ -1,5 +1,12 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
+
+import org.junit.Assert;
+
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelField;
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelTable;
 import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
@@ -7,6 +14,7 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 @ExcelTable(mappingFile = "testMapping.json", datacontroller = TestDataController.class)
 public class TestDataClass implements DataClass
 {
+    private final DateFormat dateFormat;
 
     @ExcelField(exportable = true)
     private String testFieldExport;
@@ -16,6 +24,15 @@ public class TestDataClass implements DataClass
 
     @ExcelField(importable = true)
     private String testFieldImport;
+
+    @ExcelField(exportable = true, importable = true, getterMethod = "getTestOptionalGetterSetterAsText",
+            setterMethod = "setTestOptionalGetterSetterAsText")
+    private Date testOptionalGetterSetter;
+
+    public TestDataClass()
+    {
+        dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY);
+    }
 
     public String getTestFieldExport()
     {
@@ -32,6 +49,17 @@ public class TestDataClass implements DataClass
         return testFieldImport;
     }
 
+    public Date getTestOptionalGetterSetter()
+    {
+        return testOptionalGetterSetter;
+    }
+
+    public String getTestOptionalGetterSetterAsText()
+    {
+
+        return dateFormat.format(testOptionalGetterSetter);
+    }
+
     public void setTestFieldExport(final String aTestFieldExport)
     {
         testFieldExport = aTestFieldExport;
@@ -45,6 +73,23 @@ public class TestDataClass implements DataClass
     public void setTestFieldImport(final String aTestFieldImport)
     {
         testFieldImport = aTestFieldImport;
+    }
+
+    public void setTestOptionalGetterSetter(final Date aTestOptionalGetterSetter)
+    {
+        testOptionalGetterSetter = aTestOptionalGetterSetter;
+    }
+
+    public void setTestOptionalGetterSetterAsText(final String aTestOptionalGetterSetter)
+    {
+        try
+        {
+            testOptionalGetterSetter = dateFormat.parse(aTestOptionalGetterSetter);
+        }
+        catch (final ParseException parseException)
+        {
+            Assert.fail(parseException.getLocalizedMessage());
+        }
     }
 
     @Override

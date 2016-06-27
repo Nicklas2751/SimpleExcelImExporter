@@ -36,4 +36,11 @@ public @interface ExcelTable
      */
     String mappingFile() default "";
 
+    /**
+     * An optional parameter to set a table name differing from the class name.
+     *
+     * @return The table name.
+     */
+    String tableName() default "";
+
 }

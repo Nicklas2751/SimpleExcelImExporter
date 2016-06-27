@@ -18,6 +18,9 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelField;
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelTable;
 import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataController;
+import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExportErrorTypes;
+import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterError;
+import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterException;
 import eu.wiegandt.nicklas.simpleexcelimexporter.utils.LocalFileLoaderUtil;
 
 /**
@@ -43,6 +46,7 @@ public class ExcelTableManager
     private static final String NOT_EVERY_NEEDED_SETTER_EXISTS_PATTERN =
             "Not every needed setter exists. Following setters are needed: [%s]";
     private final Class<? extends DataClass> excelTableClass;
+    private String tableName;
 
     /**
      * A constructor which calls some methods to check if the given class is
@@ -135,6 +139,29 @@ public class ExcelTableManager
     }
 
     /**
+     * Determines the table name. Uses the data class name as table name if the
+     * optional annotation parameter {@link ExcelTable#tableName()} is not set.
+     *
+     * @return The determined table name.
+     */
+    public String getTableName()
+    {
+        if (tableName == null)
+        {
+            final String annotatedTableName = excelTableClass.getAnnotation(ExcelTable.class).tableName();
+            if (annotatedTableName.isEmpty())
+            {
+                tableName = excelTableClass.getSimpleName();
+            }
+            else
+            {
+                tableName = annotatedTableName;
+            }
+        }
+        return tableName;
+    }
+
+    /**
      * Checks if a {@link ExcelField} with the given name exists for the
      * dataclass of this manager.
      *
@@ -194,8 +221,20 @@ public class ExcelTableManager
 
         for (final Field field : getExportableExcelFields())
         {
-            final String neededGetterName = AbstractExcelImExporter
-                    .fieldNameToGetterName(new ExcelImExporterField(null, null, field.getName()));
+            String neededGetterName;
+            try
+            {
+                neededGetterName =
+                        new ExcelImExporterField(null, null, field.getName()).getGetterMethodName(excelTableClass);
+            }
+            catch (NoSuchFieldException | SecurityException exception)
+            {
+                LOG.fatal(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
+                final ExcelImExporterError errorMessage =
+                        new ExcelImExporterError(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR);
+                throw new IllegalStateException(new ExcelImExporterException(errorMessage));
+
+            }
             final boolean isExistNeededGetterName = existingMethodNames.contains(neededGetterName);
             if (!isExistNeededGetterName)
             {
@@ -221,8 +260,19 @@ public class ExcelTableManager
 
         for (final Field field : getImportableExcelFields())
         {
-            final String neededSetterName = AbstractExcelImExporter
-                    .fieldNameToSetterName(new ExcelImExporterField(null, null, field.getName()));
+            String neededSetterName;
+            try
+            {
+                neededSetterName =
+                        new ExcelImExporterField(null, null, field.getName()).getSetterMethodName(excelTableClass);
+            }
+            catch (NoSuchFieldException | SecurityException exception)
+            {
+                LOG.fatal(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
+                final ExcelImExporterError errorMessage =
+                        new ExcelImExporterError(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR);
+                throw new IllegalStateException(new ExcelImExporterException(errorMessage));
+            }
             final boolean isExistNeededSetterName = existingMethodNames.contains(neededSetterName);
             if (!isExistNeededSetterName)
             {

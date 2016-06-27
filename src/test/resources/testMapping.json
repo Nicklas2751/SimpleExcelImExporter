@@ -1,5 +1,6 @@
 {
 	"imexport": "testFieldImExport",
 	"export": "testFieldExport",
-	"import": "testFieldImport"
+	"import": "testFieldImport",
+	"dateField": "testOptionalGetterSetter"
 }

@@ -1,6 +1,5 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelTableManager;
 import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 
 public enum TestDataClasses

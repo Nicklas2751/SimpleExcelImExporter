@@ -23,9 +23,6 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import eu.wiegandt.nicklas.simpleexcelimexporter.AbstractExcelImExporter;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelImExportObserver;
-import eu.wiegandt.nicklas.simpleexcelimexporter.ExcelImporter;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterError;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterException;
 import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterWarning;
@@ -44,8 +41,8 @@ public class ExcelImporterTest implements ExcelImExportObserver
 {
     private static final String CLEAN_MAPPING_FILE_FILENAME = "testCleanMapping.json";
     private static final Logger LOG = LogManager.getLogger(ExcelImporterTest.class);
-    private static final String SIMPLE_EXCEL_IMPORT_TEST_FILE_PATH = "importTest/testdataclassnomappingfile.xlsx";
-    private static final String TEST_CLASS_FOR_CLEAN_MAPPING_TEST = "testdataclassnomappingfile";
+    private static final String SIMPLE_EXCEL_IMPORT_TEST_FILE_PATH = "importTest/TestTableSimple.xlsx";
+    private static final String TEST_CLASS_FOR_CLEAN_MAPPING_TEST = "testtablesimple";
 
     @BeforeClass
     public static final void beforeClass()
