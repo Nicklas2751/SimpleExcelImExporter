@@ -341,11 +341,13 @@ public class ExcelImporter extends AbstractExcelImExporter
     }
 
     private Collection<? extends DataClass> mappToDataclasses(final ExcelTableManager aTableManager, final Sheet aSheet,
-            final Collection<ExcelImExporterField> aFields)
+                                                              final Collection<ExcelImExporterField> aFields)
     {
-        final List<Row> rows = StreamSupport.stream(aSheet.spliterator(), true).collect(Collectors.toList());
+        List<Row> rows = StreamSupport.stream(aSheet.spliterator(), true).collect(Collectors.toList());
+        rows = rows.stream().filter(row -> row.getFirstCellNum() != -1).collect(Collectors.toList());
         rows.remove(0);// The column name row
         addDataSetsToProcess(rows.size());
+
         return rows.parallelStream().map(row -> mappToDataclass(row, aTableManager, aFields))
                 .collect(Collectors.toList());
     }
