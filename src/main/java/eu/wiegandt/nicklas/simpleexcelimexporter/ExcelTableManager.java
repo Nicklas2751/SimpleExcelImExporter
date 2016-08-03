@@ -134,8 +134,16 @@ public class ExcelTableManager
 
     public String getMappingFilePath()
     {
-        return LocalFileLoaderUtil.getLocalFile(excelTableClass.getAnnotation(ExcelTable.class).mappingFile())
-                .getAbsolutePath();
+        try
+        {
+            return LocalFileLoaderUtil.getLocalFile(excelTableClass.getAnnotation(ExcelTable.class).mappingFile())
+                    .getAbsolutePath();
+        }
+        catch (Exception exception)
+        {
+            LOG.warn("Could not get the mapping file path", exception);
+            return "";
+        }
     }
 
     /**
@@ -181,7 +189,8 @@ public class ExcelTableManager
      */
     public boolean hasMappingFilePath()
     {
-        return !(getMappingFilePath().isEmpty() || new File(getMappingFilePath()).isDirectory());
+        String mappingFilePath = getMappingFilePath();
+        return !(mappingFilePath.isEmpty() || new File(mappingFilePath).isDirectory());
     }
 
     private void checkExcelTableNotNull(final Class<? extends DataClass> aExcelTable)
