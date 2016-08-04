@@ -5,7 +5,9 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 public enum TestDataClasses
 {
 
-    TEST(TestDataClass.class), TEST_NO_MAPPING(TestDataClassNoMappingFile.class);
+    TEST(TestDataClass.class),
+    TEST_NO_MAPPING(TestDataClassNoMappingFile.class),
+    TEST_PATIENT(PatientAdresseDataClass.class);
 
     private Class<? extends DataClass> dataClass;
     private ExcelTableManager excelTableManager;
