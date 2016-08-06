@@ -1,13 +1,12 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -92,6 +91,15 @@ public abstract class AbstractExcelImExporter
     }
 
     /**
+     * @see #generateCleanMappingFile(Path, String)
+     */
+    @Deprecated
+    public static void generateCleanMappingFile(final String aFilePath, final String aTableName) throws IOException
+    {
+    	generateCleanMappingFile(Paths.get(aFilePath), aTableName);
+    }
+    
+    /**
      * A helper method to generate a mapping file for a table.<br>
      * The mapping format is: "column name": "field name".
      *
@@ -105,7 +113,7 @@ public abstract class AbstractExcelImExporter
      *             if no table with the given table name is available for im- or
      *             export.
      */
-    public static void generateCleanMappingFile(final String aFilePath, final String aTableName) throws IOException
+    public static void generateCleanMappingFile(final Path aFilePath, final String aTableName) throws IOException
     {
         final Optional<ExcelTableManager> tableManagerOptional = searchTableManager(aTableName);
         if (tableManagerOptional.isPresent())
@@ -115,7 +123,7 @@ public abstract class AbstractExcelImExporter
             final Gson gson = new GsonBuilder().setPrettyPrinting().create();
             try
             {
-                try (Writer writer = new FileWriter(new File(aFilePath)))
+                try (Writer writer = Files.newBufferedWriter(aFilePath))
                 {
                     gson.toJson(mapping, writer);
                 }
@@ -255,6 +263,12 @@ public abstract class AbstractExcelImExporter
     {
         finishedSubRuns++;
     }
+    
+    @Deprecated
+    protected BidiMap<String, String> loadMapping(final String aMappingFilePath) throws ExcelImExporterException
+    {
+    	return loadMapping(Paths.get(aMappingFilePath));
+    }
 
     /**
      * Loads the mapping from a mapping file.
@@ -265,7 +279,7 @@ public abstract class AbstractExcelImExporter
      * @throws ExcelImExporterException
      *             will be thrown if the mapping file is invalid.
      */
-    protected BidiMap<String, String> loadMapping(final String aMappingFilePath) throws ExcelImExporterException
+    protected BidiMap<String, String> loadMapping(final Path aMappingFilePath) throws ExcelImExporterException
     {
         final Gson gson = new Gson();
         final Type mapType = new TypeToken<DualHashBidiMap<String, String>>()
@@ -273,7 +287,7 @@ public abstract class AbstractExcelImExporter
         }.getType();
         try
         {
-            return gson.fromJson(new FileReader(aMappingFilePath), mapType);
+            return gson.fromJson(Files.newBufferedReader(aMappingFilePath), mapType);
         }
         catch (final JsonParseException jsonParseException)
         {
@@ -282,11 +296,11 @@ public abstract class AbstractExcelImExporter
                     new ExcelImExporterError(ExcelImExportErrorTypes.MAPPING_NO_FALID_JSON_FILE);
             throw new ExcelImExporterException(jsonParseError);
         }
-        catch (final FileNotFoundException fileNotFoundException)
+        catch (final IOException ioException)
         {
             final String errorMsg = "This error is a critical bug please report to the Autor.";
-            LogManager.getLogger(getClass()).fatal(errorMsg, fileNotFoundException);
-            throw new IllegalStateException(errorMsg, fileNotFoundException);
+            LogManager.getLogger(getClass()).fatal(errorMsg, ioException);
+            throw new IllegalStateException(errorMsg, ioException);
         }
     }
 
