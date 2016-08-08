@@ -11,7 +11,7 @@ A framework based on Apache POI to smilpify the im- and export of excel files. T
     <dependency>
       <groupId>eu.wiegandt.nicklas</groupId>
       <artifactId>simpleexcelimexporter</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
 
 ## How to use
