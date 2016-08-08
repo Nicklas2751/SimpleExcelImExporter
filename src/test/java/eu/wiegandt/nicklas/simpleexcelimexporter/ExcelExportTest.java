@@ -1,7 +1,8 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public class ExcelExportTest implements ExcelImExportObserver
     private static final String TEST_FIELD_NAME_SIMPLE_TEST_FIELD_IM_EXPORT = "testFieldImExport";
     private static Sheet testSheet;
     private List<String> columnNames;
-    private File excelFile;
+    private Path excelFilePath;
 
     private List<String> values;
 
@@ -79,7 +80,8 @@ public class ExcelExportTest implements ExcelImExportObserver
     public void setUp() throws InvalidFormatException, IOException, InterruptedException, ExecutionException,
             InstantiationException, IllegalAccessException, ExcelImExporterException
     {
-        excelFile = LocalFileLoaderUtil.getLocalFile(String.format(TEST_EXCEL_FILE_NAME_PATTERN, new Date().getTime()));
+        excelFilePath =
+                LocalFileLoaderUtil.getLocalFile(String.format(TEST_EXCEL_FILE_NAME_PATTERN, new Date().getTime()));
 
         AbstractExcelImExporter.addTableManager(TestDataClasses.TEST.getExcelTableManager());
         AbstractExcelImExporter.addTableManager(TestDataClasses.TEST_NO_MAPPING.getExcelTableManager());
@@ -89,13 +91,13 @@ public class ExcelExportTest implements ExcelImExportObserver
         tableNames.add(SIMPLE_TEST_TABLE_NAME);
         tableNames.add(EXTENDED_TEST_TABLE_NAME);
         excelExporter.addObserver(this);
-        excelExporter.exportToExcel(tableNames, excelFile.getAbsolutePath());
+        excelExporter.exportToExcel(tableNames, excelFilePath);
     }
 
     @After
-    public void tearDown()
+    public void tearDown() throws IOException
     {
-        excelFile.delete();
+        Files.delete(excelFilePath);
     }
 
     @Test
@@ -135,7 +137,7 @@ public class ExcelExportTest implements ExcelImExportObserver
 
     private void readResults(final String aTableName) throws IOException, InvalidFormatException
     {
-        final Workbook workbook = new XSSFWorkbook(excelFile);
+        final Workbook workbook = new XSSFWorkbook(Files.newInputStream(excelFilePath));
         testSheet = workbook.getSheet(aTableName);
         columnNames = new ArrayList<>();
         testSheet.getRow(0).forEach(cell -> columnNames.add(cell.getStringCellValue()));
