@@ -1,9 +1,10 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -132,10 +133,9 @@ public class ExcelTableManager
                 .filter(field -> field.getAnnotation(ExcelField.class).requiredField()).collect(Collectors.toList());
     }
 
-    public String getMappingFilePath()
+    public Path getMappingFilePath()
     {
-        return LocalFileLoaderUtil.getLocalFile(excelTableClass.getAnnotation(ExcelTable.class).mappingFile())
-                .getAbsolutePath();
+        return LocalFileLoaderUtil.getLocalFile(excelTableClass.getAnnotation(ExcelTable.class).mappingFile());
     }
 
     /**
@@ -181,7 +181,7 @@ public class ExcelTableManager
      */
     public boolean hasMappingFilePath()
     {
-        return !(getMappingFilePath().isEmpty() || new File(getMappingFilePath()).isDirectory());
+        return Files.exists(getMappingFilePath()) && !Files.isDirectory(getMappingFilePath());
     }
 
     private void checkExcelTableNotNull(final Class<? extends DataClass> aExcelTable)
@@ -291,8 +291,8 @@ public class ExcelTableManager
 
     private void checkIfMappingFileExistsIfGiven(final Class<? extends DataClass> aExcelTable)
     {
-        if (!aExcelTable.getAnnotation(ExcelTable.class).mappingFile().isEmpty() && !LocalFileLoaderUtil
-                .getLocalFile(aExcelTable.getAnnotation(ExcelTable.class).mappingFile()).exists())
+        if (!aExcelTable.getAnnotation(ExcelTable.class).mappingFile().isEmpty() && !Files
+                .exists(LocalFileLoaderUtil.getLocalFile(aExcelTable.getAnnotation(ExcelTable.class).mappingFile())))
         {
             LOG.debug("Mapping file path: "
                     + LocalFileLoaderUtil.getLocalFile(aExcelTable.getAnnotation(ExcelTable.class).mappingFile()));

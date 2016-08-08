@@ -1,10 +1,11 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -60,9 +61,29 @@ public class ExcelExporter extends AbstractExcelImExporter
      *            the file name.
      * @throws ExcelImExporterException
      *             if there was a error while exporting the tables.
+     * @deprecated Use {@link #exportToExcel(Collection, Path)} instead.
+     */
+    @Deprecated
+    public void exportToExcel(final Collection<String> aTableNames, final String aExcelPath)
+            throws ExcelImExporterException
+    {
+        exportToExcel(aTableNames, Paths.get(aExcelPath));
+    }
+
+    /**
+     * Exports the tables with the given tables names into a excel file to the
+     * given path.
+     *
+     * @param aTableNames
+     *            The table names form the tables which should be exported.
+     * @param aExcelPath
+     *            The path where the excel file should be saved. Must include
+     *            the file name.
+     * @throws ExcelImExporterException
+     *             if there was a error while exporting the tables.
      *
      */
-    public void exportToExcel(final Collection<String> aTableNames, final String aExcelPath)
+    public void exportToExcel(final Collection<String> aTableNames, final Path aExcelPath)
             throws ExcelImExporterException
 
     {
@@ -241,11 +262,11 @@ public class ExcelExporter extends AbstractExcelImExporter
 
     }
 
-    private synchronized void writeToFile(final String aExcelPath)
+    private synchronized void writeToFile(final Path aExcelPath)
     {
         try
         {
-            workbook.write(new FileOutputStream(new File(aExcelPath)));
+            workbook.write(Files.newOutputStream(aExcelPath));
             workbook.close();
         }
         catch (final IOException exception)
