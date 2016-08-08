@@ -3,7 +3,6 @@ package eu.wiegandt.nicklas.simpleexcelimexporter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelField;
 import eu.wiegandt.nicklas.simpleexcelimexporter.annotations.ExcelTable;
@@ -21,6 +20,8 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.api.DataClass;
 @ExcelTable(tableName = "Patient", datacontroller = PatientAdresseDataController.class)
 public class PatientAdresseDataClass implements DataClass
 {
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
+
     private static final String ERROR_TEXT_GEBURTSDATUM_PARSE =
             "A field Geburtsdatum had an invalid date and can't parsed. ";
 
@@ -60,7 +61,7 @@ public class PatientAdresseDataClass implements DataClass
     @ExcelField(exportable = true, importable = true, requiredField = true)
     private String vorname;
 
-    private DateTimeFormatter dateFormat;
+    private final DateTimeFormatter dateFormat;
 
     /**
      * Standard Konstruktor der alle String Felder leer und alle anderen Felder
@@ -68,7 +69,7 @@ public class PatientAdresseDataClass implements DataClass
      */
     public PatientAdresseDataClass()
     {
-        dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
+        dateFormat = DateTimeFormatter.ofPattern(DATE_FORMAT);
         adresseId = null;
         anrede = "";
         geburtsdatum = null;
