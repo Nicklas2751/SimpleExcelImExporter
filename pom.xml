@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.wiegandt.nicklas</groupId>
 	<artifactId>simpleexcelimexporter</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 	<name>Simple Excel Im- Exporter</name>
 	<description>A framework to im-/export excel tables via annotated data classes using Apache POI.</description>
@@ -46,7 +45,7 @@
 		<connection>scm:git:git@github.com:Nicklas2751/SimpleExcelImExporter.git</connection>
 		<developerConnection>scm:git:git@github.com:Nicklas2751/SimpleExcelImExporter.git</developerConnection>
 		<url>git@github.com:Nicklas2751/SimpleExcelImExporter.git</url>
-	</scm>
+  </scm>
 
 	<dependencies>
 		<dependency>
