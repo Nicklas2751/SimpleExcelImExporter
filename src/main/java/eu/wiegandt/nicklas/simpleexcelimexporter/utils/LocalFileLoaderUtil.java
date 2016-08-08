@@ -1,7 +1,8 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter.utils;
 
-import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * A utility class to load a local file.
@@ -24,11 +25,11 @@ public class LocalFileLoaderUtil
      *            The path to the file which should be loaded.
      * @return The local file.
      */
-    public static File getLocalFile(final String aLocalPath)
+    public static Path getLocalFile(final String aLocalPath)
     {
         try
         {
-            return new File(ClassLoader.getSystemResource("").toURI().getPath(), aLocalPath);
+            return Paths.get(ClassLoader.getSystemResource("").toURI()).resolve(aLocalPath);
         }
         catch (final URISyntaxException uiUriSyntaxException)
         {
