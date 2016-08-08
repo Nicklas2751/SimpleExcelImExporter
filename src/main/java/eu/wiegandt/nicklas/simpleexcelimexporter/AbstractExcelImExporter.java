@@ -91,14 +91,26 @@ public abstract class AbstractExcelImExporter
     }
 
     /**
-     * @see #generateCleanMappingFile(Path, String)
+     * * A helper method to generate a mapping file for a table.<br>
+     * The mapping format is: "column name": "field name".
+     *
+     * @param aFilePath
+     *            The path where the mapping file should be saved.
+     * @param aTableName
+     *            The table name for which the file should be generated.
+     * @throws IOException
+     *             if the file can't be written.
+     * @throws IllegalArgumentException
+     *             if no table with the given table name is available for im- or
+     *             export.
+     * @deprecated Use {@link #generateCleanMappingFile(Path, String)} instead.
      */
     @Deprecated
     public static void generateCleanMappingFile(final String aFilePath, final String aTableName) throws IOException
     {
-    	generateCleanMappingFile(Paths.get(aFilePath), aTableName);
+        generateCleanMappingFile(Paths.get(aFilePath), aTableName);
     }
-    
+
     /**
      * A helper method to generate a mapping file for a table.<br>
      * The mapping format is: "column name": "field name".
@@ -263,11 +275,21 @@ public abstract class AbstractExcelImExporter
     {
         finishedSubRuns++;
     }
-    
+
+    /**
+     * Loads the mapping from a mapping file.
+     *
+     * @param aMappingFilePath
+     *            The path to the mapping file.
+     * @return The mapping.
+     * @throws ExcelImExporterException
+     *             will be thrown if the mapping file is invalid.
+     * @deprecated Use {@link #loadMapping(Path)} instead.
+     */
     @Deprecated
     protected BidiMap<String, String> loadMapping(final String aMappingFilePath) throws ExcelImExporterException
     {
-    	return loadMapping(Paths.get(aMappingFilePath));
+        return loadMapping(Paths.get(aMappingFilePath));
     }
 
     /**

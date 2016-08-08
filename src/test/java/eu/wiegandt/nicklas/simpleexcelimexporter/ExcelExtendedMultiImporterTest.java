@@ -1,7 +1,7 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
@@ -55,9 +55,9 @@ public class ExcelExtendedMultiImporterTest implements ExcelImExportObserver
     public void testExtendedMultiImport() throws EncryptedDocumentException, InvalidFormatException, IOException,
             ExcelImExporterException, InterruptedException, ExecutionException
     {
-        final File extendedMultiImportTestFile =
+        final Path extendedMultiImportTestFilePath =
                 LocalFileLoaderUtil.getLocalFile(EXTENDED_MULTI_EXCEL_IMPORT_TEST_FILE_PATH);
-        final ExcelImporter importer = new ExcelImporter(extendedMultiImportTestFile.getAbsolutePath());
+        final ExcelImporter importer = new ExcelImporter(extendedMultiImportTestFilePath);
         importer.setMultiTableMode(true);
         importer.addObserver(this);
         importer.importExcel();

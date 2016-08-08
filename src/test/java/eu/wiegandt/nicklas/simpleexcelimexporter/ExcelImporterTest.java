@@ -1,10 +1,10 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -78,14 +78,13 @@ public class ExcelImporterTest implements ExcelImExportObserver
     @Test
     public void testCleanMappingFile() throws Exception
     {
-        final File cleanMappingFile = LocalFileLoaderUtil.getLocalFile(CLEAN_MAPPING_FILE_FILENAME);
-        AbstractExcelImExporter.generateCleanMappingFile(cleanMappingFile.getAbsolutePath(),
-                TEST_CLASS_FOR_CLEAN_MAPPING_TEST);
+        final Path cleanMappingFilePath = LocalFileLoaderUtil.getLocalFile(CLEAN_MAPPING_FILE_FILENAME);
+        AbstractExcelImExporter.generateCleanMappingFile(cleanMappingFilePath, TEST_CLASS_FOR_CLEAN_MAPPING_TEST);
         final Gson gson = new Gson();
         final Type mappingType = new TypeToken<Map<String, String>>()
         {
         }.getType();
-        final Map<String, String> actual = gson.fromJson(new FileReader(cleanMappingFile), mappingType);
+        final Map<String, String> actual = gson.fromJson(Files.newBufferedReader(cleanMappingFilePath), mappingType);
         final Set<String> expected = Arrays.stream(TestDataClassNoMappingFile.class.getDeclaredFields()).parallel()
                 .map(Field::getName).collect(Collectors.toSet());
 
@@ -96,9 +95,9 @@ public class ExcelImporterTest implements ExcelImExportObserver
     public void testSimpleImport() throws EncryptedDocumentException, InvalidFormatException, IOException,
             ExcelImExporterException, InterruptedException, ExecutionException
     {
-        final File simpleImportTestFile = LocalFileLoaderUtil.getLocalFile(SIMPLE_EXCEL_IMPORT_TEST_FILE_PATH);
-        final ExcelImporter importer = new ExcelImporter(simpleImportTestFile.getAbsolutePath());
-        importer.setTableName(simpleImportTestFile.getName().split("\\.")[0]);
+        final Path simpleImportTestFilePath = LocalFileLoaderUtil.getLocalFile(SIMPLE_EXCEL_IMPORT_TEST_FILE_PATH);
+        final ExcelImporter importer = new ExcelImporter(simpleImportTestFilePath);
+        importer.setTableName(simpleImportTestFilePath.getFileName().toString().split("\\.")[0]);
         importer.addObserver(this);
         importer.importExcel();
     }
@@ -107,10 +106,9 @@ public class ExcelImporterTest implements ExcelImExportObserver
     public void testImportExcludesEmptyRows() throws EncryptedDocumentException, InvalidFormatException, IOException,
             ExcelImExporterException, InterruptedException, ExecutionException
     {
-        final File simpleImportTestFile = LocalFileLoaderUtil.getLocalFile(EXCEL_PATIENT_IMPORT_TEST_FILE_PATH);
-        final ExcelImporter importer = new ExcelImporter(simpleImportTestFile.getAbsolutePath());
-        importer.setTableName(
-                TestDataClasses.TEST_PATIENT.getTableClass().getAnnotation(ExcelTable.class).tableName());
+        final Path simpleImportTestFilePath = LocalFileLoaderUtil.getLocalFile(EXCEL_PATIENT_IMPORT_TEST_FILE_PATH);
+        final ExcelImporter importer = new ExcelImporter(simpleImportTestFilePath);
+        importer.setTableName(TestDataClasses.TEST_PATIENT.getTableClass().getAnnotation(ExcelTable.class).tableName());
         importer.addObserver(this);
         importer.importExcel();
 
@@ -118,14 +116,14 @@ public class ExcelImporterTest implements ExcelImExportObserver
         {
         }
 
-        Collection<PatientAdresseDataClass> pushedData = PatientAdresseDataController.getPushedData();
+        final Collection<PatientAdresseDataClass> pushedData = PatientAdresseDataController.getPushedData();
         Assert.assertEquals(NOT_EMPTY_PATIENT_ROW_COUNT, pushedData.size());
     }
 
     @Override
     public void updateProgress(final float aPercentage)
     {
-        this.progressPercentage = aPercentage;
+        progressPercentage = aPercentage;
         LOG.info("Progress: " + aPercentage + "%");
     }
 }

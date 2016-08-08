@@ -1,9 +1,11 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +50,7 @@ import eu.wiegandt.nicklas.simpleexcelimexporter.exceptions.ExcelImExporterWarni
 public class ExcelImporter extends AbstractExcelImExporter
 {
     private static final Logger LOG = LogManager.getLogger(ExcelImporter.class);
-    private final String excelFilePath;
+    private final Path excelFilePath;
     private boolean multiTableMode;
 
     private String tableName;
@@ -57,8 +59,20 @@ public class ExcelImporter extends AbstractExcelImExporter
      *
      * @param aExcelFilePath
      *            The path to the excel file which should be imported.
+     * @deprecated Use {@link #ExcelImporter(Path)} instead.
      */
+    @Deprecated
     public ExcelImporter(final String aExcelFilePath)
+    {
+        this(Paths.get(aExcelFilePath));
+    }
+
+    /**
+     *
+     * @param aExcelFilePath
+     *            The path to the excel file which should be imported.
+     */
+    public ExcelImporter(final Path aExcelFilePath)
     {
         super();
         multiTableMode = false;
@@ -153,9 +167,9 @@ public class ExcelImporter extends AbstractExcelImExporter
         }
     }
 
-    private void checkPath(final String aExcelFilePath)
+    private void checkPath(final Path aExcelFilePath)
     {
-        if (!new File(aExcelFilePath).exists())
+        if (!Files.exists(aExcelFilePath))
         {
             throw new InvalidParameterException("The excel file don't exists.");
         }
@@ -211,11 +225,8 @@ public class ExcelImporter extends AbstractExcelImExporter
 
     private void importExcelTable(final String aTableName) throws ExcelImExporterException
     {
-        Workbook workbook;
-        try
+        try (Workbook workbook = WorkbookFactory.create(Files.newInputStream(excelFilePath)))
         {
-            workbook = WorkbookFactory.create(new File(excelFilePath));
-
             Sheet tableSheet;
             if (isMultiTableMode())
             {
@@ -245,9 +256,8 @@ public class ExcelImporter extends AbstractExcelImExporter
 
     private void importExcelTables() throws ExcelImExporterException
     {
-        try
+        try (Workbook workbook = WorkbookFactory.create(Files.newInputStream(excelFilePath)))
         {
-            final Workbook workbook = WorkbookFactory.create(new File(excelFilePath));
 
             setSubRuns(workbook.getNumberOfSheets());
 
@@ -341,7 +351,7 @@ public class ExcelImporter extends AbstractExcelImExporter
     }
 
     private Collection<? extends DataClass> mappToDataclasses(final ExcelTableManager aTableManager, final Sheet aSheet,
-                                                              final Collection<ExcelImExporterField> aFields)
+            final Collection<ExcelImExporterField> aFields)
     {
         List<Row> rows = StreamSupport.stream(aSheet.spliterator(), true).collect(Collectors.toList());
         rows = rows.stream().filter(row -> row.getFirstCellNum() != -1).collect(Collectors.toList());
