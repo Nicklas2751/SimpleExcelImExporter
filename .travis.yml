@@ -36,16 +36,15 @@ jobs:
       -out .travis/secring.gpg -d
     deploy:
       - provider: script
-      script: 
-        - ./mvnw --settings .maven.xml deploy
-      skip_cleanup: true
-      
+        script: 
+          - ./mvnw --settings .maven.xml deploy
+        skip_cleanup: true
       - provider: releases
-      api_key:
-        secure: $GITHUB_DEPLOY_TOKEN
-      file_glob: true
-      file:
-      - target/*
-      skip_cleanup: true
-      on:
-        tags: true
+        api_key:
+          secure: $GITHUB_DEPLOY_TOKEN
+        file_glob: true
+        file:
+        - target/*
+        skip_cleanup: true
+        on:
+          tags: true
