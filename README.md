@@ -3,8 +3,8 @@ A framework based on Apache POI to smilpify the im- and export of excel files. T
 
 ## Status / Additional informations
 * Gitter: [![Join the chat at https://gitter.im/Nicklas2751/SimpleExcelImExporter](https://badges.gitter.im/Nicklas2751/SimpleExcelImExporter.svg)](https://gitter.im/Nicklas2751/SimpleExcelImExporter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* Jenkins: [![Build Status](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/badge/icon)](http://jenkins.wiegandt.eu/job/SimpleExcelImExporter/)
-* Sonar: [![Quality Gate](http://sonar.wiegandt.eu/api/badges/gate?key=eu.wiegandt.nicklas%3Asimpleexcelimexporter)](http://sonar.wiegandt.eu/dashboard/index/eu.wiegandt.nicklas%3Asimpleexcelimexporter)
+* Travis-ci: [![Build Status](https://travis-ci.org/Nicklas2751/SimpleExcelImExporter.svg?branch=master)](https://travis-ci.org/Nicklas2751/SimpleExcelImExporter) | [![Build Status Development](https://travis-ci.org/Nicklas2751/SimpleExcelImExporter.svg?branch=development)](https://travis-ci.org/Nicklas2751/SimpleExcelImExporter)
+* Sonarcloud: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Nicklas2751_SimpleExcelImExporter&metric=alert_status)](https://sonarcloud.io/dashboard?id=Nicklas2751_SimpleExcelImExporter)
 * JavaDoc: [![Javadocs](http://www.javadoc.io/badge/eu.wiegandt.nicklas/simpleexcelimexporter.svg)](http://www.javadoc.io/doc/eu.wiegandt.nicklas/simpleexcelimexporter)
 
 ## Maven Artifact

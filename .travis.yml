@@ -4,11 +4,6 @@ jdk:
 addons:
   sonarcloud:
     organization: nicklas2751-github
-    branches:
-    - master
-    - develop
-    - feature/.*
-    - hotfix/.*
 before_install:
   - chmod +x mvnw    
 stages:
@@ -24,11 +19,9 @@ jobs:
       directories:
       - .autoconf
       - $HOME/.m2
-    after_success:
-    - sonar-scanner
   - stage: Deploy
     script:
-    - ./mvnw clean install
+    - ./mvnw clean install sonar:sonar
     cache:
       directories:
       - .autoconf
