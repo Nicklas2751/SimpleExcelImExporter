@@ -5,7 +5,9 @@ addons:
   sonarcloud:
     organization: nicklas2751-github
 before_install:
-  - chmod +x mvnw    
+  - chmod +x mvnw  
+  - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in .travis/secring.gpg.enc -out .travis/secring.gpg -d
+  - gpg --fast-import .travis/secring.gpg    
 stages:
 - Test
 - name: Deploy
@@ -14,22 +16,18 @@ jobs:
   include:
   - stage: Test
     script:
-    - ./mvnw clean verify
+    - ./mvnw clean verify sonar:sonar
     cache:
       directories:
       - .autoconf
       - $HOME/.m2
   - stage: Deploy
     script:
-    - ./mvnw clean install sonar:sonar
+    - ./mvnw clean install
     cache:
       directories:
       - .autoconf
-      - $HOME/.m2
-    before_deploy:
-      - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in .travis/secring.gpg.enc
-        -out .travis/secring.gpg -d
-      - gpg --fast-import .travis/secring.gpg  
+      - $HOME/.m2    
     deploy:
       - provider: script
         script:
