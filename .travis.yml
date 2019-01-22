@@ -1,0 +1,51 @@
+language: java
+jdk:
+- oraclejdk8
+addons:
+  sonarcloud:
+    organization: nicklas2751-github
+    branches:
+    - master
+    - develop
+    - feature/.*
+    - hotfix/.*
+stages:
+- Test
+- name: Deploy
+  if: branch = master OR tag = true
+jobs:
+  include:
+  - stage: Test
+    script:
+    - ./mvnw clean verify
+    cache:
+      directories:
+      - .autoconf
+      - $HOME/.m2
+    after_success:
+    - sonar-scanner
+  - stage: Deploy
+    script:
+    - ./mvnw clean install
+    cache:
+      directories:
+      - .autoconf
+      - $HOME/.m2
+    before_deploy:
+    - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in .travis/secring.gpg.enc
+      -out .travis/secring.gpg -d
+    deploy:
+      - provider: script
+      script: 
+        - ./mvnw --settings .maven.xml deploy
+      skip_cleanup: true
+      
+      - provider: releases
+      api_key:
+        secure: $GITHUB_DEPLOY_TOKEN
+      file_glob: true
+      file:
+      - target/*
+      skip_cleanup: true
+      on:
+        tags: true
