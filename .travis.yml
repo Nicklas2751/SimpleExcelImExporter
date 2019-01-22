@@ -49,5 +49,3 @@ jobs:
         file:
         - target/*
         skip_cleanup: true
-        on:
-          tags: true
