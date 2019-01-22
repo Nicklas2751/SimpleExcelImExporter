@@ -34,8 +34,9 @@ jobs:
       - .autoconf
       - $HOME/.m2
     before_deploy:
-    - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in .travis/secring.gpg.enc
-      -out .travis/secring.gpg -d
+      - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in .travis/secring.gpg.enc
+        -out .travis/secring.gpg -d
+      - gpg --fast-import .travis/secring.gpg  
     deploy:
       - provider: script
         script:
