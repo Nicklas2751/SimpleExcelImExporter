@@ -121,6 +121,7 @@ public class ExcelExporter extends AbstractExcelImExporter
             LOG.fatal(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
             final ExcelImExporterError errorMessage =
                     new ExcelImExporterError(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR);
+			Thread.currentThread().interrupt();
             throw new ExcelImExporterException(errorMessage);
         }
     }
