@@ -14,14 +14,14 @@ jobs:
   include:
   - stage: Test
     script:
-    - ./mvnw clean verify
+    - ./mvnw clean verify sonar:sonar
     cache:
       directories:
       - .autoconf
       - $HOME/.m2
   - stage: Deploy
     script:
-    - ./mvnw clean install sonar:sonar
+    - ./mvnw clean install
     cache:
       directories:
       - .autoconf
