@@ -17,6 +17,7 @@ jobs:
   include:
   - stage: Test
     script:
+    - chmod +x mvnw
     - ./mvnw clean verify
     cache:
       directories:
@@ -26,6 +27,7 @@ jobs:
     - sonar-scanner
   - stage: Deploy
     script:
+    - chmod +x mvnw
     - ./mvnw clean install
     cache:
       directories:
@@ -36,7 +38,8 @@ jobs:
       -out .travis/secring.gpg -d
     deploy:
       - provider: script
-        script: 
+        script:
+          - chmod +x mvnw
           - ./mvnw --settings .maven.xml deploy
         skip_cleanup: true
       - provider: releases
