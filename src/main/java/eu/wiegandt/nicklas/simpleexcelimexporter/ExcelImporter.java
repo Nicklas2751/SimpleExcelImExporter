@@ -1,6 +1,7 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
 import java.io.IOException;
+import java.lang.Thread;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -245,7 +246,7 @@ public class ExcelImporter extends AbstractExcelImExporter
 
             importExcelTable(tableSheet, aTableName);
         }
-        catch (EncryptedDocumentException | InvalidFormatException | IOException exception)
+        catch (EncryptedDocumentException | IOException exception)
         {
             LOG.fatal(ExcelImExportErrorTypes.IMPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
             final ExcelImExporterError errorMessage =
@@ -279,12 +280,13 @@ public class ExcelImporter extends AbstractExcelImExporter
                 result.get();
             }
         }
-        catch (EncryptedDocumentException | InvalidFormatException | IOException | InterruptedException
+        catch (EncryptedDocumentException | IOException | InterruptedException
                 | ExecutionException exception)
         {
             LOG.fatal(ExcelImExportErrorTypes.IMPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
             final ExcelImExporterError errorMessage =
                     new ExcelImExporterError(ExcelImExportErrorTypes.IMPORT_FAILED_SYSTEM_ERROR);
+			Thread.currentThread().interrupt();
             throw new ExcelImExporterException(errorMessage);
         }
     }

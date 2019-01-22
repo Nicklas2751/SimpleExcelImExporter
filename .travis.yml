@@ -14,7 +14,7 @@ before_install:
 stages:
 - Test
 - name: Deploy
-  if: branch = master OR tag = true
+  if: branch IN (master,development) OR tag = true
 jobs:
   include:
   - stage: Test

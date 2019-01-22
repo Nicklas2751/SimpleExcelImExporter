@@ -1,6 +1,7 @@
 package eu.wiegandt.nicklas.simpleexcelimexporter;
 
 import java.io.IOException;
+import java.lang.Thread;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -183,10 +184,10 @@ public class ExcelExporter extends AbstractExcelImExporter
         catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
                 | SecurityException | NoSuchFieldException exception)
         {
-
             LOG.fatal(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR.getMessageTemplate(), exception);
             final ExcelImExporterError errorMessage =
                     new ExcelImExporterError(ExcelImExportErrorTypes.EXPORT_FAILED_SYSTEM_ERROR);
+			Thread.currentThread().interrupt();
             throw new IllegalStateException(new ExcelImExporterException(errorMessage));
         }
     }
