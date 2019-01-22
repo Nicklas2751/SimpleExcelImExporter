@@ -9,6 +9,8 @@ addons:
     - develop
     - feature/.*
     - hotfix/.*
+before_install:
+  - chmod +x mvnw    
 stages:
 - Test
 - name: Deploy
@@ -17,7 +19,6 @@ jobs:
   include:
   - stage: Test
     script:
-    - chmod +x mvnw
     - ./mvnw clean verify
     cache:
       directories:
@@ -27,7 +28,6 @@ jobs:
     - sonar-scanner
   - stage: Deploy
     script:
-    - chmod +x mvnw
     - ./mvnw clean install
     cache:
       directories:
@@ -39,7 +39,6 @@ jobs:
     deploy:
       - provider: script
         script:
-          - chmod +x mvnw
           - ./mvnw --settings .maven.xml deploy
         skip_cleanup: true
       - provider: releases
