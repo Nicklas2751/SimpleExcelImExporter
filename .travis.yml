@@ -35,8 +35,8 @@ jobs:
         script:
           - ./mvnw --settings .maven.xml deploy
         skip_cleanup: true
-		on:
-			all_branches: true
+        on:
+            all_branches: true
       - provider: releases
         api_key:
           secure: $GITHUB_DEPLOY_TOKEN
@@ -44,5 +44,5 @@ jobs:
         file:
         - target/*
         skip_cleanup: true
-		on:
-			all_branches: true
+        on:
+            all_branches: true
